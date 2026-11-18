@@ -1,0 +1,11 @@
+{
+  "name": "Wirtschaftsrecht – Karteikartenstudio KG & AG",
+  "short_name": "KG & AG Lernen",
+  "description": "Karteikarten mit Spaced Repetition zu Wirtschaftsrecht und Rechnungswesen",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f8fc",
+  "theme_color": "#132e4c",
+  "icons": [{"src":"assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
