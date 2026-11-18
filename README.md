@@ -1,125 +1,102 @@
-# Karteikartenstudio KG & AG
+# KG & AG Lernarena – GitHub / Netlify
 
-Eine vollständig statische, responsive Web-App mit **189 vorgefertigten Lernkarten in 11 Themenstapeln** zu den bereitgestellten Lernskripten und Übungsaufgaben für KG- und AG-Recht.
+Eine eigenständige, mobilfähige Lernplattform zu **Kommanditgesellschaft und Aktiengesellschaft** auf Basis der bereitgestellten Unterrichtsskripte, Übungsaufgaben und Lernübersichten.
 
-Die Anwendung benötigt **keinen Server, keine Datenbank, keinen Login, keine npm-Pakete, keinen Build-Schritt** und lädt keine externen JavaScript- oder Bildbibliotheken. Sie kann auf GitHub versioniert und bei Netlify bereitgestellt werden.
+**Technik:** HTML/CSS/JavaScript ohne Frontend-Framework, Netlify Functions (Node.js) und Netlify Blobs. **Keine Supabase-Instanz, kein SQL-Editor, keine `AUTH`-Umgebungsvariable, kein fest eingebautes Passwort**. Für die Schülerinnen und Schüler ist nur die Netlify-Adresse erforderlich.
 
-## Funktionen
+## A. In fünf Schritten veröffentlichen
 
-- **Spaced Repetition** mit vier Bewertungen: „Noch einmal“, „Unsicher“, „Fast sicher“, „Sicher“.
-- Wiederholungsabstände für alle Bewertungen **individuell einstellbar** (Minuten, Stunden, Tage, Wochen); zusätzlicher Lernfaktor und Höchstintervall.
-- Lernkarten mit Frage, Erklärung, konkretem Beispiel/Rechenweg, Merksatz und Herkunftsangabe.
-- **11 vorgefertigte Stapel mit 189 Karten** (KG-Gründung, KG-Haftung, Rechte und Pflichten, KG-Gewinnverwendung, AG-Gründung, Organe, Kapitalerhöhung, Bezugsrechte, Stimmrechte, AG-Gewinnverwendung, Transfers).
-- Alle vorgefertigten Karten können **bearbeitet, verschoben und gelöscht** werden; außerdem eigene Karten und Stapel anlegen.
-- Suchfunktion und Filter nach neu, fällig oder selbst angelegt.
-- Lernfortschritt je Stapel und letzte sieben Tage.
-- **JSON**-Export/-Import eines oder aller Stapel; vollständiges JSON-Backup enthält Lernstände und Einstellungen.
-- **CSV**-Export zur Bearbeitung in Excel/LibreOffice und anschließender Re-Import; Karten-IDs erhalten Änderungen an bestehenden Karten.
-- **TSV**-Export für den Import in Anki (jeweils Vorderseite und Rückseite).
-- Smartphone- und Desktopansicht; Tastaturbedienung mit Leertaste und 1–4.
-- Service Worker für die Offline-Nutzung nach dem ersten erfolgreichen Laden über HTTPS.
+1. **ZIP entpacken**. In den entpackten Ordner `KG_AG_Lernarena_Netlify` wechseln.
+2. **Neues GitHub-Repository** erstellen, z. B. `kg-ag-lernarena`. Die **Inhalte** des entpackten Ordners direkt in die oberste Ebene des Repositories laden. **Nicht die ZIP selbst als einzige Datei hochladen.** `package.json`, `netlify.toml`, `public/` und `netlify/functions/` müssen direkt im Repository liegen.
+3. Unter <https://app.netlify.com/> ein neues Projekt über **Add new project → Import an existing project → GitHub** erstellen und dieses Repository auswählen.
+4. Die Einstellungen aus `netlify.toml` werden automatisch übernommen: **Publish directory = `public`**, **Functions directory = `netlify/functions`**. Für die statische Website gibt es **keinen Build-Befehl**. Netlify installiert die Node-Pakete anhand von `package.json` automatisch. Node 22 wird über `.nvmrc` angefordert.
+5. **Deploy** ausführen. Nach der Veröffentlichung den Netlify-Link öffnen und unter „Anmelden → Konto erstellen“ einen Test-Nickname registrieren. Danach mit demselben Nickname auf einem zweiten Browser/Gerät anmelden und eine Karte lernen. Den Fortschritt prüfen.
 
-## Deployment über GitHub und Netlify
+Die Netlify-Blobs-Stores werden **bei den ersten Registrierungen und Speicherzugriffen automatisch erstellt**. Weder SQL-Befehle noch eine manuell angelegte Datenbank oder ein allgemeiner `AUTH`-Schlüssel sind nötig.
 
-1. Das ZIP-Archiv entpacken.
-2. Bei GitHub ein neues Repository erstellen, z. B. `kg-ag-karteikarten`.
-3. **Den Inhalt des entpackten Projektordners** ins Repository hochladen. Wichtig: `index.html` muss im Stammverzeichnis des Repositories liegen (nicht in einem zusätzlichen Unterordner).
-4. In Netlify: **Add new project → Import an existing project → GitHub**.
-5. Das Repository auswählen. Es ist kein Build nötig. Einstellungen:
+### Wenn du die Seite aktualisierst
 
-   | Einstellung | Wert |
-   |---|---|
-   | Build command | **leer lassen** |
-   | Publish directory | `.` (Punkt, Stammverzeichnis) |
-   | Branch | `main` (oder gewählte Branch) |
+Änderungen am Repository nach GitHub pushen; Netlify erstellt automatisch ein neues Deployment. Bei siteweiten Blobs bleiben Konten und Lernstände **über Deployments hinweg** erhalten. Bewahre die Netlify-Site als dasselbe Projekt auf; eine komplett neue Site besitzt ein anderes Blobs-Datenlager.
 
-6. **Deploy** starten. Netlify erzeugt eine URL wie `https://DEIN-NAME.netlify.app`.
-7. Diesen Link im Lernkurs, auf Lernsax oder über QR-Code teilen.
+## B. Lernfunktionen
 
-Alternativ kannst du den entpackten Projektordner direkt per **Netlify Drop** veröffentlichen. Bei Änderungen an einem GitHub-Repository kann Netlify automatisch neu deployen.
+- **189 Fachkarten** in **11 Themenstapeln** zu KG-Gründung, Handelsregister, Haftung, Geschäftsführung, Vertretung, KG-Gewinnverteilung/OSF sowie AG-Gründung, Organe, Aktienarten, Kapitalerhöhung, Bezugsrecht, Stimmrechten, Sperrminorität, Rücklagen und AG-Gewinnverwendung.
+- **Spaced Repetition**: vier Bewertungen (`Noch einmal`, `Unsicher`, `Fast sicher`, `Sicher`) mit selbst veränderbaren Intervallen, Multiplikator und Maximalabstand. Fällige Karten werden erneut angezeigt.
+- **Wissensduell**: 40 zusätzliche Multiple-Choice-Fragen, jeweils acht zufällig gezogene Fragen. KG-/AG-/gemischte Duelle; ohne Zeitdruck oder als 90-Sekunden-Blitzduell mit Erklärung nach jeder Frage.
+- **Gamification**: XP und Level, Antwortserien, 14 Abzeichen, Lernserie an aufeinanderfolgenden Tagen, drei täglich neu verfügbare Missionen mit XP-Boni, Levelaufstiegs-Animation, Duellstatistiken und sichtbare Stapelfortschritte. Kein öffentliches Schüler-Ranking; keine Wettbewerbsdaten anderer Lernender.
+- **Eigene Stapel und Karten** erstellen, bearbeiten, verschieben oder löschen. Bestehende Karten können bearbeitet werden.
+- **Export/Import**: kompletter Stand einschließlich XP, Lernintervallen und Bewertungen als JSON; einzelne Stapel/Karten als CSV oder Anki-TSV. Bei CSV/TSV wird kein Benutzerpasswort exportiert.
+- **Responsive Layout**, nutzbar am Desktop, Tablet und Smartphone. PWA-/Startbildschirm-Funktion auf unterstützten Geräten. Der Gastmodus funktioniert nach Laden der App auch ohne Internet; mit Konto werden Änderungen bei verfügbarer Verbindung synchronisiert.
 
-### Einbindung in einen bestehenden Lernkurs
+## C. Gastmodus und Benutzerkonten
 
-Wenn das Lernmanagementsystem eingebettete Seiten zulässt, ist auch eine Einbettung möglich:
+**Gast:** ohne Anmeldung beginnen. Lernstände und Kartenänderungen landen in `localStorage` des jeweiligen Browsers. Gerätewechsel im Gastmodus nur mittels JSON-Export/-Import.
 
-```html
-<iframe
-  title="Karteikartenstudio KG und AG"
-  src="https://DEIN-NAME.netlify.app/"
-  width="100%"
-  height="850"
-  style="border:0; border-radius:16px;"
-  loading="lazy">
-</iframe>
-```
+**Konto:** „Anmelden → Konto erstellen“ aufrufen, selbstgewählten Nickname (3–24 Buchstaben, Ziffern, `_` oder `-`) und Passwort (10–128 Zeichen) wählen. Ein Gaststand kann übernommen werden. Danach speichern Netlify Functions den Lernstand in Netlify Blobs. Mit Nickname und Passwort können Schülerinnen und Schüler auf einem zweiten Gerät weiterarbeiten. Ein vorhandener Gaststand kann beim Login wahlweise hinzugefügt werden.
 
-Ansonsten ist ein normaler Link meist unkomplizierter. Die Einbettung hängt von den Einstellungen des Lernmanagementsystems ab.
+**Keine E-Mail nötig.** Weil der Kurs bewusst nur Nickname und Passwort kennt, **gibt es keine automatische Passwort-Wiederherstellung**. Schüler sollten ihre Passwörter sicher aufbewahren und regelmäßig ein JSON-Backup exportieren.
 
-## Datenspeicherung und Datenschutz
+### Synchronisation und Konflikte
 
-**Alle Lernstände, Kartenänderungen, eigenen Stapel und Einstellungen werden ausschließlich im lokalen Browser-Speicher (`localStorage`) abgelegt.**
+- Speicherung über HTTPS und ein sicheres `HttpOnly`/`SameSite`-Sitzungscookie (30 Tage, bis zur Abmeldung); es wird kein Klartext-Passwort im Browser gespeichert.
+- Im Konto werden Änderungen auch lokal zwischengespeichert; der Server wird mit Netlify Blobs synchronisiert. Bei unterbrochener Internetverbindung kann ein lokaler Entwurf erhalten bleiben.
+- Ändert sich derselbe Lernstand gleichzeitig auf zwei Geräten, erkennt die App einen **Versionskonflikt**. Sie fragt, ob der lokale Stand überschrieben oder der neuere Cloud-Stand geladen werden soll. Der abweichende lokale Stand wird vorher als Browser-Backup abgelegt. Es gibt keine unsichtbare Last-Write-Wins-Übernahme.
+- **Wichtig für Schüler:** Nicht gleichzeitig auf zwei Geräten verschiedene Karten bearbeiten, ohne die Synchronisation abzuwarten.
 
-- Es gibt **keine automatische Synchronisierung** zwischen Smartphone, Schul-PC und privatem Notebook.
-- Lehrkräfte haben **keinen zentralen Einblick** in individuelle Lernstände.
-- Beim Löschen der Browserdaten oder beim Wechsel des Geräts können gespeicherte Lernstände verloren gehen.
-- Empfohlen: regelmäßig **Export → Alle Stapel → JSON** herunterladen. Diese Sicherung über **Import → JSON** auf einem anderen Gerät importieren.
-- Bei gemeinschaftlich genutzten Schulgeräten beachten: Wenn mehrere Personen dasselbe Browserprofil benutzen, können sie dieselben lokalen Daten sehen und verändern. Vor der Nutzung sollten getrennte Browserprofile oder private Sitzungen eingesetzt werden (private Sitzungen behalten den Stand allerdings nicht langfristig).
+## D. Datenverarbeitung und Sicherheit
 
-Für **kontoübergreifende Synchronisierung, Lehrkräfte-Dashboard oder gemeinsame Klassenstände** wäre später eine Datenbank mit Authentifizierung notwendig. Das ist bewusst nicht Bestandteil dieser datensparsamen Version.
+- **Netlify Blobs** speichert auf dem Server in getrennten Stores: `kgag-accounts-prod`, `kgag-sessions-prod`, `kgag-progress-prod`, `kgag-loginlimits-prod` (Vorschau-Deployments nutzen abweichende Sandbox-Stores).
+- Passwörter werden **mit scrypt und einem eigenen zufälligen Salt je Nickname** gehasht. Session-Tokens sind 256-Bit-Zufallswerte; in Blobs wird nur ihr SHA-256-Hash als Schlüssel gespeichert.
+- Die Cloud-Schnittstelle akzeptiert keine beliebig vom Browser angegebenen Benutzer- oder Blobs-Schlüssel. Nach Authentifizierung wird der Datensatz aus der Sitzung ermittelt.
+- Registrierungen verwenden atomare `onlyIfNew`-Schreibzugriffe; Änderungen per `ETag`/`onlyIfMatch`. Blobs-Zugriffe werden **strongly consistent** ausgeführt.
+- Der Login begrenzt wiederholt falsche Passworteingaben je Nickname. Cross-Origin-POST-Anfragen werden abgelehnt.
+- Kein allgemeiner `AUTH`-Schlüssel und keine Umgebungsvariable für die Registrierung erforderlich. Netlify stellt die technische Zugriffsberechtigung seiner Functions auf die Blobs-Stores bereit.
+- **Hinweis:** Netlify Blobs ist ein Objektspeicher, keine relationale Datenbank. Diese Lösung ist für einen überschaubaren Lernkurs gedacht. Bei sehr großer gleichzeitiger Nutzung, schulweiten Account-/Rechtemanagement-Anforderungen oder gesetzlichen Vorgaben ist eine gesonderte Prüfung von Datenschutz, Belastung, Kosten und Backupstrategie erforderlich.
+- Die Betreiberseite sollte vor dem Einsatz mit Minderjährigen die eigenen schulischen Datenschutzvorgaben und Netlifys Auftragsverarbeitung/Hosting-Bedingungen prüfen.
+- Die per Browser angezeigten XP sind Lernmotivation und **keine manipulationssicheren Leistungsnachweise**. Für benotete Tests darf man diese Werte nicht unkontrolliert als Prüfungsergebnis übernehmen.
 
-## Wiederholungslogik
-
-Die Anwendung arbeitet **nach dem Spaced-Repetition-Prinzip**, nicht mit einer bitgenauen Implementierung des Anki-Schedulers.
-
-Standard-Startabstände:
-
-| Bewertung | Nächste Wiederholung |
-|---|---|
-| Noch einmal | 3 Minuten |
-| Unsicher | 12 Stunden |
-| Fast sicher | 3 Tage |
-| Sicher | 7 Tage |
-
-Bei wiederholt sicher bewerteten Karten verlängert sich das Intervall abhängig von der vorherigen Zeit und dem einstellbaren Wachstumsfaktor (Standard 1,8). „Noch einmal“ setzt die Serie zurück; bei einer laufenden Lerneinheit erscheint die Karte außerdem noch einmal am Ende der Runde (maximal zweimal zusätzlich). Die Intervalle und die Obergrenze können im Reiter **Einstellungen** geändert werden.
-
-**Karten gelten als „sicher“**, wenn sie mindestens drei erfolgreiche Wiederholungen und mindestens sieben Tage Intervall erreicht haben.
-
-## Arbeiten mit Stapeln und Karten
-
-- **Neuer Stapel:** „+ Stapel“ auf der Übersicht oder in der Verwaltung.
-- **Neue Karte:** „+ Karte“; Vorderseite und Rückseite sind Pflicht. Beispiel und Merksatz sind optional.
-- **Karte verschieben:** „Karten verwalten → Bearbeiten → Stapel“ ändern.
-- **Lernstand bewerten:** Karte öffnen, selbst antworten, „Antwort aufdecken“, 1–4 auswählen.
-- **Karte exportieren:** „Export“ öffnen und Stapel + Dateiformat wählen.
-- **Karten in Tabellenkalkulation bearbeiten:** Als CSV exportieren, in Excel bearbeiten, **Spalten `Karten-ID` und `Stapel-ID` nicht verändern**, erneut als Semikolon-CSV speichern, in der App importieren.
-- **Anki:** TSV-Datei im Anki-Import als tabulatorgetrennte Datei mit den Feldern Vorderseite und Rückseite importieren; wenn möglich HTML-Feldformat erlauben, um Zeilenumbrüche darzustellen.
-
-## Dateien
+## E. Verzeichnisstruktur
 
 ```text
-index.html             Einstiegspunkt und Editierdialoge
-style.css              Responsive Layout
-app.js                 Lernlogik, Datenhaltung, Editor, Import/Export
-assets/decks.js        Vorkonfigurierte Stapel und Karten (wird direkt geladen)
-assets/decks.json      Gleiche Inhalte als lesbare JSON-Datenquelle
-assets/icon.svg        Kleines App-Icon
-manifest.webmanifest   Installierbare Web-App
-sw.js                  Offline-Zwischenspeicher
-netlify.toml           Netlify-Einstellungen
+KG_AG_Lernarena_Netlify/
+├── public/
+│   ├── index.html              # Website
+│   ├── app.js                  # Lernmodus, Editor, Quiz, XP, Cloud-Sync
+│   ├── style.css               # Responsive Darstellung
+│   ├── sw.js                   # Offline-Cache der öffentlichen Dateien
+│   ├── manifest.webmanifest    # Installierbare Web-App
+│   └── assets/
+│       ├── decks.js            # 189 Unterrichts-Fachkarten
+│       ├── challenges.js       # 40 Wissenstest-Fragen
+│       └── icon.svg
+├── netlify/functions/api.mjs    # Authentifizierung, Sessions, Cloud-Sync
+├── netlify.toml                # Netlify-Konfiguration
+├── package.json               # @netlify/blobs v11.1.9
+├── .nvmrc                      # Node 22
+└── README.md
 ```
 
-Wenn du die Basisinhalte **vor der Veröffentlichung** direkt ändern möchtest, bearbeite `assets/decks.json` und übertrage den identischen JSON-Inhalt in `assets/decks.js` hinter die Zeichenfolge `window.KG_AG_LIBRARY = `; der Abschluss ist ein Semikolon. Einfacher ist das Bearbeiten über die Oberfläche – Änderungen dort gelten allerdings zunächst nur im jeweiligen Browser und werden **nicht automatisch** ins GitHub-Repository geschrieben.
+## F. Lokaler Test (optional)
 
-## Fachliche Grundlage
+Mit Node.js 22 (und Internetzugang zu npm) im Projektordner:
 
-Die Karten paraphrasieren die im Gespräch bereitgestellten Kursmaterialien und Aufgaben zu Einzelunternehmen, KG-Gründung, KG-Haftung, Geschäftsführung/Vertretung, KG-Gewinnverwendung, AG-Gründung, AG-Organen, Kapitalerhöhung/Bezugsrechten/Stimmrechten sowie AG-Gewinnverwendung und offener Selbstfinanzierung. Sie orientieren sich an den dort verwendeten Rechenmodellen, Fachbegriffen und Gesetzesverweisen. Bei Rechtsfragen sind die gültige Gesetzessammlung und die konkrete Aufgabenstellung maßgeblich.
+```bash
+npm install
+npx netlify-cli dev
+```
 
-## Hinweise für Lehrkräfte
+Anschließend die von Netlify CLI angezeigte localhost-Adresse öffnen. Netlify Dev verwendet eine lokale Blobs-Testumgebung; die Live-Konten werden dadurch nicht verändert. Für die serverseitigen Tests: `npm test`. Die Browser-E2E-Tests benötigen zusätzlich Python, Playwright und Chromium. *Ein lokaler Test ohne die Netlify-CLI oder ohne Mockserver kann keine echten Cloud-Konten verwalten.*
 
-- Vor einer Klausur fachliche Karten stichprobenartig gegen die ausgegebene Gesetzessammlung und die Unterrichtsfassung des Skripts prüfen.
-- Die App stellt keine rechtsverbindliche Beratung dar.
-- Die Kartenauswahl ist als Ergänzung zu den vollständigen Übungsblättern gedacht; komplexe Prüfungsaufgaben bleiben wichtig.
+## G. Fachliche Hinweise
 
-## Technische Voraussetzungen
+Die Inhalte der 189 Fachkarten orientieren sich an den bereitgestellten KG-/AG-Skripten, Übungsaufgaben und dem besprochenen Klausurniveau. Die 40 Zusatzfragen im Wissensduell sind ergänzende Lernfragen, **keine Original-Klausuraufgaben**. Die Anwendung ersetzt die Gesetzessammlung und Formelsammlung nicht; bei rechtlichen Fällen gilt weiterhin die genaue gesetzliche Prüfung, bei Rechenaufgaben die vollständige Herleitung.
 
-Aktueller Browser mit Unterstützung für `localStorage`, `dialog` und modernes JavaScript (Chrome/Edge/Firefox/Safari). Hosting über HTTPS ist für die Offline-Installation empfohlen und wird bei Netlify automatisch angeboten.
+## H. Hinweise bei Fehlern
+
+- **Konto funktioniert nicht:** Netlify-Deployment öffnen und unter **Logs / Functions** Fehler prüfen; sicherstellen, dass Netlify die Abhängigkeit `@netlify/blobs` installiert hat.
+- **Anmeldung auf zweitem Gerät führt zu leerem Stand:** zuerst prüfen, ob mit derselben Netlify-Site und identischem Nickname gearbeitet wird; am Ausgangsgerät Synchronisationsstatus prüfen; nötigenfalls JSON-Backup importieren.
+- **Netlify Vorschau zeigt nicht dieselben Konten:** gewollt – Vorschau-Kontexte nutzen getrennte Sandbox-Stores.
+- **Passwort vergessen:** Es gibt bewusst keinen Reset ohne E-Mail oder Administrator. Über das betroffene Gerät ggf. JSON sichern und ein neues Konto anlegen.
+- **Daten kommen nach Wechsel des Netlify-Projekts nicht an:** Blobs-Stores gehören zur jeweiligen Netlify-Site. JSON-Daten aus der bisherigen Site sichern und auf der neuen importieren.
+
+**Stand:** November 2026. Ein echter Produktivtest auf deiner späteren Netlify-Site ist erst nach deinem Deployment möglich.

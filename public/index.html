@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#132e4c">
+  <meta name="description" content="Karteikarten zu KG- und AG-Recht mit Wiederholungsintervallen, Lernstatistik und Import/Export.">
+  <title>KG & AG · Lernarena</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script src="assets/decks.js" defer></script>
+  <script src="assets/challenges.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Zum Inhalt</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Navigation">
+      <div class="brand" tabindex="0">
+        <span class="brand-mark" aria-hidden="true">§</span>
+        <div><div class="brand-kicker">DEINE WIRTSCHAFTS-LERNARENA</div><strong>Wirtschaftsrecht</strong><span>Missionen · Wissen · Erfolge</span></div>
+      </div>
+      <nav class="nav-primary" id="primaryNav" aria-label="Hauptmenü">
+        <button type="button" class="nav-button active" data-page="dashboard"><span class="nav-ico" aria-hidden="true">▦</span>Übersicht</button>
+        <button type="button" class="nav-button" data-page="study"><span class="nav-ico" aria-hidden="true">◈</span>Lernen</button>
+        <button type="button" class="nav-button" data-page="challenge"><span class="nav-ico" aria-hidden="true">⚡</span>Wissensduell</button>
+        <button type="button" class="nav-button" data-page="achievements"><span class="nav-ico" aria-hidden="true">🏅</span>Erfolge & Missionen</button>
+        <button type="button" class="nav-button" data-page="manage"><span class="nav-ico" aria-hidden="true">▤</span>Karten verwalten</button>
+        <button type="button" class="nav-button" data-page="progress"><span class="nav-ico" aria-hidden="true">◴</span>Fortschritt</button>
+        <button type="button" class="nav-button" data-page="settings"><span class="nav-ico" aria-hidden="true">⚙</span>Einstellungen</button>
+      </nav>
+      <div class="sidebar-group"><div class="group-head"><span>THEMENSTAPEL</span><button type="button" class="icon-btn" id="sidebarNewDeck" aria-label="Stapel anlegen" title="Stapel anlegen">+</button></div>
+        <div id="deckNav" class="deck-nav"></div>
+      </div>
+      <div class="sidebar-foot"><span class="offline-dot" aria-hidden="true"></span><span id="sideAccountLabel">Gastmodus · auf diesem Gerät</span></div>
+    </aside>
+    <div class="content-column">
+      <header class="topbar"><div id="crumb" class="crumb">Übersicht <span> / Lerndecks</span></div><div class="top-actions"><span id="xpHeader" class="xp-pill" aria-label="Erfahrungspunkte">✦ 0 XP</span><button class="button account-button" id="accountOpen" type="button">↗ Anmelden</button><button type="button" class="button ghost" id="topImport">Import</button><button type="button" class="button primary" id="topExport">Export <span aria-hidden="true">↗</span></button></div></header>
+      <main id="main" class="main" tabindex="-1" aria-live="polite"></main>
+      <footer class="footer">Lernarena für KG & AG · Fachinhalte aus den bereitgestellten Unterrichtsmaterialien · Gast lokal / mit Konto geräteübergreifend</footer>
+    </div>
+  </div>
+
+  <dialog id="cardDialog" class="modal" aria-labelledby="cardDialogTitle">
+    <form id="cardForm" novalidate>
+      <div class="modal-head"><div><p class="eyebrow">KARTENEDITOR</p><h2 id="cardDialogTitle">Karte hinzufügen</h2></div><button type="button" class="close-btn" data-close-dialog="cardDialog" aria-label="Schließen">×</button></div>
+      <div class="modal-body">
+        <input type="hidden" name="cardId">
+        <div class="form-grid two"><label>Stapel<select name="deckId" id="cardDeck" required></select></label><label>Kartentyp<select name="kind"><option value="wissen">Wissen / Begriff</option><option value="recht">Gesetz / Recht</option><option value="rechnung">Rechenweg</option><option value="fall">Fallbeurteilung</option><option value="vergleich">Vergleich</option><option value="prozess">Ablauf</option><option value="beurteilen">Beurteilen</option><option value="definition">Definition</option><option value="erklaeren">Erklären</option></select></label></div>
+        <label>Vorderseite · Frage / Problem<textarea name="front" rows="3" maxlength="800" required placeholder="Welche Regel gilt bei ...?"></textarea></label>
+        <label>Rückseite · Erklärung<textarea name="answer" rows="5" maxlength="7000" required placeholder="Knappe Antwort, die Zusammenhänge erklärt.\n- Aufzählungen mit Bindestrich"></textarea></label>
+        <label>Beispiel / Rechenhinweis<textarea name="example" rows="3" maxlength="2500" placeholder="Optionales Beispiel oder konkreter Rechenweg"></textarea></label>
+        <label>Merksatz<textarea name="memory" rows="2" maxlength="1000" placeholder="Eine wichtige Eselsbrücke oder Fehlerfalle"></textarea></label>
+        <label>Schlagwörter (kommagetrennt)<input name="tags" maxlength="350" placeholder="z. B. Haftung, HGB, Einlage"></label>
+        <div class="muted small">Formatierung der Rückseite: Zeilen, die mit „- “ beginnen, erscheinen als Aufzählung. Die Inhalte werden als Text gespeichert – kein HTML-Code nötig.</div>
+      </div>
+      <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog="cardDialog">Abbrechen</button><button class="button primary" type="submit">Karte speichern</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="deckDialog" class="modal short" aria-labelledby="deckDialogTitle">
+    <form id="deckForm">
+      <div class="modal-head"><div><p class="eyebrow">STAPEL VERWALTEN</p><h2 id="deckDialogTitle">Neuen Stapel anlegen</h2></div><button type="button" class="close-btn" data-close-dialog="deckDialog" aria-label="Schließen">×</button></div>
+      <div class="modal-body"><input type="hidden" name="deckId"><label>Stapelname<input type="text" name="title" maxlength="100" required placeholder="z. B. Zusatzfälle KG-Haftung"></label><label>Beschreibung<input type="text" name="description" maxlength="220" placeholder="Worum geht es in diesem Stapel?"></label><label>Akzentfarbe<select name="color"><option value="#168a8f">Petrol</option><option value="#2477be">Blau</option><option value="#2c9d6d">Grün</option><option value="#b8841d">Gold</option><option value="#a16dc1">Violett</option></select></label></div>
+      <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog="deckDialog">Abbrechen</button><button class="button primary" type="submit">Stapel speichern</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="exportDialog" class="modal short" aria-labelledby="exportDialogTitle">
+    <div class="modal-head"><div><p class="eyebrow">DEINE DATEN</p><h2 id="exportDialogTitle">Stapel exportieren</h2></div><button type="button" class="close-btn" data-close-dialog="exportDialog" aria-label="Schließen">×</button></div>
+    <div class="modal-body"><label>Welche Karten?<select id="exportDeck"></select></label><label>Format<select id="exportFormat"><option value="json">JSON · bearbeitbar und wieder importierbar</option><option value="csv">CSV · Tabellenkalkulation (Excel)</option><option value="tsv">TSV · Anki-Import (Frage / Antwort)</option></select></label><div class="notice"><strong>Hinweis:</strong> Nur der vollständige JSON-Export enthält auch Lernstände, Intervalle und Einstellungen. CSV/TSV exportieren die Karteninhalte.</div></div>
+    <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog="exportDialog">Schließen</button><button type="button" class="button primary" id="downloadExport">Datei herunterladen</button></div>
+  </dialog>
+
+  <dialog id="importDialog" class="modal short" aria-labelledby="importDialogTitle">
+    <div class="modal-head"><div><p class="eyebrow">DEINE DATEN</p><h2 id="importDialogTitle">Karten importieren</h2></div><button type="button" class="close-btn" data-close-dialog="importDialog" aria-label="Schließen">×</button></div>
+    <div class="modal-body"><label>Datei auswählen<input id="importFile" type="file" accept=".json,.csv,.tsv,.txt,application/json,text/csv,text/tab-separated-values,text/plain"></label><label>Importmodus<select id="importMode"><option value="merge">Hinzufügen / vorhandene IDs aktualisieren</option><option value="replace">Vollständigen Stand ersetzen (nur JSON)</option></select></label><label>Bei TSV-Import: Zielstapel<select id="importDeck"></select></label><div class="notice">CSV-Dateien aus diesem Tool können in Excel bearbeitet und wieder importiert werden. TSV-Dateien benötigen pro Zeile zwei durch Tabulator getrennte Felder: <strong>Vorderseite</strong> und <strong>Rückseite</strong>. Sichere deinen Lernstand vor einem Import.</div></div>
+    <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog="importDialog">Schließen</button><button type="button" class="button primary" id="runImport">Importieren</button></div>
+  </dialog>
+  <dialog id="accountDialog" class="modal short" aria-labelledby="accountDialogTitle">
+    <div class="modal-head"><div><p class="eyebrow">KONTO & SYNCHRONISATION</p><h2 id="accountDialogTitle">Anmelden</h2></div><button type="button" class="close-btn" data-close-dialog="accountDialog" aria-label="Schließen">×</button></div>
+    <div class="modal-body"><div class="auth-switch"><button type="button" class="filter-pill active" id="tabLogin">Anmelden</button><button type="button" class="filter-pill" id="tabRegister">Konto erstellen</button></div>
+      <div id="signedInBox" hidden></div>
+      <form id="accountForm" autocomplete="on"><label>Nickname<input name="nickname" required minlength="3" maxlength="24" autocomplete="username" placeholder="3–24 Zeichen, z. B. Lernfuchs24"></label>
+      <label>Passwort<input name="password" required type="password" minlength="10" maxlength="128" autocomplete="current-password" placeholder="Mindestens 10 Zeichen"></label>
+      <label class="checkline"><input name="takeLocal" type="checkbox" checked> Gast-Lernstand übernehmen (falls vorhanden)</label>
+      <p class="small muted" id="authHelp">Ohne E-Mail-Adresse. Passwort sicher aufbewahren: Es gibt keinen E-Mail-Reset.</p>
+      <p id="accountFeedback" role="alert" class="account-feedback" aria-live="assertive"></p>
+      <button class="button primary" id="accountSubmit" type="submit">Anmelden & synchronisieren</button></form>
+    </div>
+  </dialog>
+  <div id="celebration" aria-hidden="true"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name":"KG & AG Lernarena – Wirtschaftsrecht",
+  "short_name":"Lernarena KG/AG",
+  "description":"Karteikarten, Spaced Repetition, Wissensduelle, XP und Nickname-Cloudspeicherung",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#f3f8fc",
+  "theme_color":"#132e4c",
+  "icons":[{"src":"assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
